@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:24:02 by otaraki           #+#    #+#             */
-/*   Updated: 2023/06/16 10:42:25 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/06/17 00:11:35 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_philo
     int time_to_eat;
     int time_to_sleep;
     int nbr_of_meals;
+    //add a last time eating.
     struct s_philo *next;
 }               t_philo;
 
