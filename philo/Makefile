@@ -6,7 +6,7 @@
 #    By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/16 03:24:07 by otaraki           #+#    #+#              #
-#    Updated: 2023/06/16 04:33:18 by otaraki          ###   ########.fr        #
+#    Updated: 2023/06/16 10:35:19 by otaraki          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ CC := cc
 
 CFLAGS :=  -Wall -Wextra -Werror
 
-SRCS := Manda/philo.c Manda/test1.c
+SRCS := Manda/philo.c Manda/utils.c \
 
 OBJ := $(SRCS:.c=.o)
 
