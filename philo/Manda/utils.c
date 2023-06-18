@@ -6,14 +6,14 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 04:18:08 by otaraki           #+#    #+#             */
-/*   Updated: 2023/06/16 11:11:20 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/06/18 02:32:16 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 # include "../includes/philo.h"
 
-t_philo	*ft_lstnew_ph(int id)
+t_philo	*ft_lstnew_ph(int id, t_table *table)
 {
 	t_philo	*node;
 
@@ -21,6 +21,8 @@ t_philo	*ft_lstnew_ph(int id)
 	if (node == NULL)
 		return (NULL);
 	node->id = id;
+	node->table = table;
+	pthread_mutex_init(&node->fork, NULL);
 	node->next = NULL;
 	return (node);
 }
