@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:46:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/06/18 02:05:31 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/10 11:01:52 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void check_args(t_table *arg)
 		printf("the philo must die\n");
 		exit (0);
 	}
-	else if (arg->nbr_of_philo < 1 || arg->nbr_of_philo > 200)
+	else if (arg->nbr_of_philo < 1)
 	{
 		printf("the number of philos invalid\n");
 		exit (0);
@@ -58,6 +58,8 @@ t_table *set_args(char **av)
 	ph->time_to_die = ft_atoi(av[2]);
 	ph->time_to_eat = ft_atoi(av[3]);
 	ph->time_to_sleep = ft_atoi(av[4]);
+	ph->died = 0;
+	ph->time_begin = time_now(); 
 	check_args(ph);
 	add_philos(&ph, ph->nbr_of_philo, av);
 	return (ph);
@@ -70,7 +72,7 @@ int main(int ac, char **av)
     if (ac == 5 || ac == 6)
 	{
 		philo = set_args(av);
-		start_dinner(philo->philos, philo->nbr_of_philo);
+		// start_dinner(philo->philos, philo->nbr_of_philo);
 	}
 	else
     	printf( "Inavlid args!\n");
