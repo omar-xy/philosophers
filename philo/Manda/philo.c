@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:46:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/10 11:01:52 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/10 14:51:08 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,25 @@ void check_args(t_table *arg)
 
 void	add_philos(t_table **ph, int n, char **av)
 {
-	int	i;
-	t_philo *tmp;
+	int				i;
+	t_philo			*tmp;
+	pthread_mutex_t	*d;
+	pthread_mutex_t *w;
 
+	d = malloc(sizeof(pthread_mutex_t));
+	w = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(d, NULL);
+	pthread_mutex_init(w, NULL);
 	i = 1;
 	while (i <= n)
 	{
 		tmp = ft_lstnew_ph(i, *ph);
+		tmp->death = d;
+		tmp->write = w;
 		if (av[5])
 			tmp->nbr_of_meals = ft_atoi(av[5]);
 		else
-			tmp->nbr_of_meals = 0;
+			tmp->nbr_of_meals = -1;
 		ft_lstadd_back_ph(&(*ph)->philos, tmp);
 		i++;
 	}
@@ -50,7 +58,6 @@ void	add_philos(t_table **ph, int n, char **av)
 t_table *set_args(char **av)
 {
 	t_table	*ph;
-    
 	ph = malloc(sizeof(t_table));
 	if (ph == NULL)
 		return NULL;
@@ -59,7 +66,6 @@ t_table *set_args(char **av)
 	ph->time_to_eat = ft_atoi(av[3]);
 	ph->time_to_sleep = ft_atoi(av[4]);
 	ph->died = 0;
-	ph->time_begin = time_now(); 
 	check_args(ph);
 	add_philos(&ph, ph->nbr_of_philo, av);
 	return (ph);
@@ -72,7 +78,10 @@ int main(int ac, char **av)
     if (ac == 5 || ac == 6)
 	{
 		philo = set_args(av);
-		// start_dinner(philo->philos, philo->nbr_of_philo);
+		if (!philo)
+			return (1);
+		philo->time_begin = time_now();
+		start_dinner(philo->philos, philo->nbr_of_philo);
 	}
 	else
     	printf( "Inavlid args!\n");

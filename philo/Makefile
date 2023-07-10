@@ -6,7 +6,7 @@
 #    By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/16 03:24:07 by otaraki           #+#    #+#              #
-#    Updated: 2023/07/10 09:55:27 by otaraki          ###   ########.fr        #
+#    Updated: 2023/07/10 13:19:11 by otaraki          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ all : $(NAME)
 
 $(NAME) : $(OBJ)
 	make -C libft
-	$(CC) $(OBJ) -o $(NAME) $(LIBFT)
+	$(CC) $(OBJ) -o $(NAME) $(LIBFT) -g  -fsanitize=thread
 
 %.o : %.c $(HEADER) 
 	$(CC) $(CFLAGS) -c $< -o $@
