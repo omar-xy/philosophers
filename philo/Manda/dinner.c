@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 00:38:05 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/10 15:49:11 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/12 18:16:28 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,50 +20,39 @@ unsigned long time_now(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	ft_my_usleep(unsigned long t, t_philo *philo)
+void	ft_my_usleep(unsigned long t)
 {
 	unsigned long	period;
 
 	period = time_now();
-	while((time_now() - period) < t)
-	{
-		if (time_now() - philo->last_meal > philo->table->time_to_die)
-		{
-			pthread_mutex_lock(philo->write);
-			printf("%ld %d die \n",time_now() - philo->table->time_begin, philo->id);
-			pthread_mutex_lock(philo->death);
-			philo->table->died = 1;
-			pthread_mutex_unlock(philo->death);
-		}
+	while ((time_now() - period) < t)
 		usleep(100);
-	}
+	return ;
 }
 
 void	*pattern(void *temp)
 {
 	t_philo *philo;
-	
+	int		meal;
+
+	meal = 0;
 	philo = (t_philo *)temp;
 	if ((philo->id % 2) == 0)
 		usleep(400);
 	philo->last_meal = time_now();
 	while (1)
 	{
-		pthread_mutex_lock(&philo->fork);
-		pthread_mutex_lock(philo->write);
-		printf("%lu %d has taken a fork 1\n", time_now() - philo->table->time_begin, philo->id);
-		pthread_mutex_unlock(philo->write);//first fork
-		pthread_mutex_lock(&philo->next->fork);
-		pthread_mutex_lock(philo->write);
-		printf("%lu %d has taken a fork 2\n", time_now() - philo->table->time_begin, philo->id);
-		pthread_mutex_unlock(philo->write);// second fork
+		lock_forks(philo);
 		eating(philo);
-		ft_my_usleep(philo->table->time_to_eat, philo);
+		if (meal < philo->nbr_of_meals)
+			meal++;
+		if (meal == philo->nbr_of_meals)
+			philo->table->nbr_of_philo -= 1;
+		ft_my_usleep(philo->table->time_to_eat);
 		philo->last_meal = time_now();
-		pthread_mutex_unlock(&philo->fork);
-		pthread_mutex_unlock(&philo->next->fork);
+		unlock_forks(philo);
 		sleeping(philo);
-		ft_my_usleep(philo->table->time_to_sleep, philo);
+		ft_my_usleep(philo->table->time_to_sleep);
 		thinking(philo);
 	}
 	return (philo);
@@ -87,11 +76,19 @@ void	start_dinner(t_philo *filo, int n)
 		filo = filo->next;
 		i++;
 	}
-	while (1)
+	while (filo)
 	{
-		if (filo->table->died)
-			return ;
 		usleep(1000);
+		if (time_now() - filo->last_meal > filo->table->time_to_die)
+		{
+			pthread_mutex_lock(filo->write);
+			printf("%ld %d died \n",time_now() - (filo->table->time_begin), filo->id);
+			pthread_mutex_lock(filo->death);
+			filo->table->died = 1;
+			pthread_mutex_unlock(filo->death);
+		}
+		if (filo->table->died || filo->table->nbr_of_philo <= 0)
+			return ;
+		filo = filo->next;
 	}
-	
 }

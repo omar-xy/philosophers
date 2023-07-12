@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:24:02 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/10 15:30:27 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/12 18:41:41 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,16 @@
 
 typedef struct s_philo
 {
-    int id;
-    pthread_t thread;
-    pthread_mutex_t fork;
-    int nbr_of_meals;
-    pthread_mutex_t *write;
-    pthread_mutex_t *death;
-    unsigned long last_meal;
-    struct s_table *table;
-    struct s_philo *next;
-}               t_philo;
+    int				id;
+    int				nbr_of_meals;
+    unsigned long	last_meal;
+    pthread_t		thread;
+    pthread_mutex_t	fork;
+    pthread_mutex_t	*write;
+    pthread_mutex_t	*death;
+    struct s_table	*table;
+    struct s_philo	*next;
+}               	t_philo;
  
 typedef struct s_table
 { 
@@ -45,16 +45,18 @@ typedef struct s_table
 }               t_table;
 
 //parse utils
-t_philo	*ft_lstnew_ph(int id, t_table *table);
-t_philo	*ft_lstlast_ph(t_philo *lst);
-void	ft_lstadd_back_ph(t_philo **lst, t_philo *new);
-t_table *set_args(char **av);
-void check_args(t_table *arg);
-unsigned long time_now(void);
+t_philo         *ft_lstnew_ph(int id, t_table *table);
+t_philo         *ft_lstlast_ph(t_philo *lst);
+t_table         *set_args(char **av);
+void            ft_lstadd_back_ph(t_philo **lst, t_philo *new);
+unsigned long   time_now(void);
 
-void	start_dinner(t_philo *filo, int n);
-unsigned long time_now(void);
-void	eating(t_philo *philo);
-void	sleeping(t_philo *philo);
-void	thinking(t_philo *philo);
+void	        start_dinner(t_philo *filo, int n);
+unsigned long   time_now(void);
+void			ft_my_usleep(unsigned long t);
+void			lock_forks(t_philo *philo);
+void			unlock_forks(t_philo *philo);
+void	        eating(t_philo *philo);
+void	        sleeping(t_philo *philo);
+void	        thinking(t_philo *philo);
 #endif

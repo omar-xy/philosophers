@@ -6,45 +6,27 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:46:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/10 14:51:08 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/12 18:58:52 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/philo.h"
 
-void check_args(t_table *arg)
-{
-	if (arg->nbr_of_philo == 1)
-	{
-		usleep(arg->time_to_eat);
-		printf("the philo must die\n");
-		exit (0);
-	}
-	else if (arg->nbr_of_philo < 1)
-	{
-		printf("the number of philos invalid\n");
-		exit (0);
-	}
-	
-}
-
-void	add_philos(t_table **ph, int n, char **av)
+t_table	*initialize_philos(t_table **ph, int n, char **av)
 {
 	int				i;
 	t_philo			*tmp;
-	pthread_mutex_t	*d;
-	pthread_mutex_t *w;
+	pthread_mutex_t	d;	
+	pthread_mutex_t	w;
 
-	d = malloc(sizeof(pthread_mutex_t));
-	w = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(d, NULL);
-	pthread_mutex_init(w, NULL);
+	pthread_mutex_init(&d, NULL);
+	pthread_mutex_init(&w, NULL);
 	i = 1;
 	while (i <= n)
 	{
 		tmp = ft_lstnew_ph(i, *ph);
-		tmp->death = d;
-		tmp->write = w;
+		tmp->death = &d;
+		tmp->write = &w;
 		if (av[5])
 			tmp->nbr_of_meals = ft_atoi(av[5]);
 		else
@@ -53,21 +35,24 @@ void	add_philos(t_table **ph, int n, char **av)
 		i++;
 	}
 	ft_lstlast_ph((*ph)->philos)->next = (*ph)->philos;
+	return (*ph);
 }
 
 t_table *set_args(char **av)
 {
 	t_table	*ph;
+
 	ph = malloc(sizeof(t_table));
 	if (ph == NULL)
-		return NULL;
+		return (NULL);
 	ph->nbr_of_philo = ft_atoi(av[1]);
+	if (ph->nbr_of_philo == 0)
+		return NULL;// indicate the error
 	ph->time_to_die = ft_atoi(av[2]);
 	ph->time_to_eat = ft_atoi(av[3]);
 	ph->time_to_sleep = ft_atoi(av[4]);
+	ph->time_begin = time_now();
 	ph->died = 0;
-	check_args(ph);
-	add_philos(&ph, ph->nbr_of_philo, av);
 	return (ph);
 }
 
@@ -80,10 +65,14 @@ int main(int ac, char **av)
 		philo = set_args(av);
 		if (!philo)
 			return (1);
-		philo->time_begin = time_now();
+		philo = initialize_philos(&philo, philo->nbr_of_philo, av);
+		if (!philo)
+			return (1);
 		start_dinner(philo->philos, philo->nbr_of_philo);
 	}
 	else
+	{
     	printf( "Inavlid args!\n");
+		return 1;
+	}
 }
- 
