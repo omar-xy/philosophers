@@ -6,11 +6,24 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:46:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/12 18:58:52 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/13 03:21:01 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/philo.h"
+
+static int check_args(char **av)
+{
+	int i;
+
+	i = -1;
+	while (av[++i])
+	{
+		if (ft_atoi(av[i]) <= 0)
+			return 1;
+	}
+	return 0;
+}
 
 t_table	*initialize_philos(t_table **ph, int n, char **av)
 {
@@ -62,6 +75,7 @@ int main(int ac, char **av)
 
     if (ac == 5 || ac == 6)
 	{
+		if (check_args(av)= = 
 		philo = set_args(av);
 		if (!philo)
 			return (1);
