@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:30:18 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/25 06:35:57 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/25 06:41:32 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_table	*initialize_philos(t_table **ph, int n, char **av)
 	dead = sem_open("dead", O_CREAT, 0654, 0);
 	if (av[5])
 	{
-		nb_m = sem_open("nbr_of_meals", O_CREAT, 0654, nb_m);
+		nb_m = sem_open("nbr_of_meals", O_CREAT, 0654, ft_atoi(av[5]));
 		// (*ph)->nb_of_meals = nb_m;
 		(*ph)->nbr_meals = ft_atoi(av[5]);
 	}
