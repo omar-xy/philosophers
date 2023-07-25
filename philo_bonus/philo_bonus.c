@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:30:18 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/25 06:28:22 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/25 06:35:57 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,23 @@ t_table	*initialize_philos(t_table **ph, int n, char **av)
 	t_philo			*tmp;
 	sem_t			*forks;
 	sem_t			*dead;
-	// sem_t			*nb_m;
+	sem_t			*nb_m;
 	
 
 	i = 1;
 	sem_unlink("forks");
 	sem_unlink("dead");
-	// sem_unlink("nbr_of_meals");
+	sem_unlink("nbr_of_meals");
 	forks = sem_open("forks", O_CREAT, 0654, ft_atoi(av[1]));
 	dead = sem_open("dead", O_CREAT, 0654, 0);
-	// if (av[5])
-	// {
-	// 	nb_m = sem_open("nbr_of_meals", O_CREAT, 0654, 0);
-	// 	(*ph)->nb_of_meals = nb_m;
-	// 	(*ph)->nbr_meals = ft_atoi(av[5]);
-	// }
-	// else
-	// 	(*ph)->nbr_meals = -1;
+	if (av[5])
+	{
+		nb_m = sem_open("nbr_of_meals", O_CREAT, 0654, nb_m);
+		// (*ph)->nb_of_meals = nb_m;
+		(*ph)->nbr_meals = ft_atoi(av[5]);
+	}
+	else
+		(*ph)->nbr_meals = -1;
 	(*ph)->fork = forks;
 	(*ph)->death = dead;
 	while (i <= n)
