@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 02:08:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/25 04:18:39 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/26 01:05:37 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_table
     unsigned long	time_to_sleep;
     unsigned long	time_begin;
     sem_t           *death;
+	sem_t 			*write;	
     sem_t           *fork;
 	sem_t			*nb_of_meals;
     struct s_philo	*philos;

@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 02:33:05 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/25 06:30:23 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/26 01:22:35 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,23 @@ void	routine(t_philo *ph)
 		lock_forks(ph);
 		eating(ph);
 		ft_my_usleep(ph->table->time_to_eat, ph);
-		ph->last_meal = time_now();
 		unlock_forks(ph);
-		// if (ph->table->nbr_meals != -1 && meal < ph->table->nbr_meals)
-		// 	meal++;
-		// if (meal == ph->table->nbr_meals)
-		// {
-		// 	sem_post(ph->table->nb_of_meals);
-		// 	exit(0);	
-		// }
+		ph->last_meal = time_now();
+		if (ph->table->nbr_meals != -1 && meal < ph->table->nbr_meals)
+			meal++;
+		if (meal == ph->table->nbr_meals)
+		{
+			//printf("DONE\n");
+			sem_post(ph->table->nb_of_meals);
+			exit(0);	
+		}
 		sleeping(ph);
 		ft_my_usleep(ph->table->time_to_sleep, ph);
 		thinking(ph);
 	}
 }
 // should handle the case of one philo
-// should handle the optional case
+// should handle the
 void	fork_for_philo(t_philo *ph, char **av)
 {
 	int		i;
@@ -48,7 +49,6 @@ void	fork_for_philo(t_philo *ph, char **av)
 	pid_t	p;
 	t_philo	*tmp;
 
-	(void)av;
 	i = 0;
 	tmp = ph;
 	pids = malloc(sizeof(pid_t) * ph->table->nbr_of_philo);
@@ -68,16 +68,16 @@ void	fork_for_philo(t_philo *ph, char **av)
 	}
 	error:
 		free(pids);
-	// if (av[5])
-	// {
-	// 	i = 0;
-	// 	while (i < ph->table->nbr_of_philo)
-	// 	{
-	// 		sem_wait(ph->table->nb_of_meals);
-	// 		i++;
-	// 	}
-	// 	sem_post(ph->table->death);
-	// }
+	if (av[5])
+	{
+		i = 0;
+		while (i < ph->table->nbr_of_philo)
+		{
+			sem_wait(ph->table->nb_of_meals);
+			i++;
+		}
+		sem_post(ph->table->death);
+	}
 	sem_wait(ph->table->death);
 	i = 0;
 	while (i < ph->table->nbr_of_philo)
