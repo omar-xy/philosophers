@@ -6,21 +6,20 @@
 #    By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/16 03:24:07 by otaraki           #+#    #+#              #
-#    Updated: 2023/07/12 21:01:19 by otaraki          ###   ########.fr        #
+#    Updated: 2023/07/24 23:12:47 by otaraki          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 HEADER = includes/philo.h
-LIBFT = libft/libft.a
 
 CC := cc
 
-CFLAGS :=  -Wall -Wextra -Werror
+CFLAGS :=  -Wall -Wextra -Werror 
 
-SRCS := Manda/philo.c Manda/utils.c Manda/dinner.c\
-Manda/pattern.c\
+SRCS := Manda/philo.c Manda/utils.c Manda/dinner.c Manda/ft_atoi.c\
+Manda/error.c Manda/pattern.c\
 
 OBJ := $(SRCS:.c=.o)
 
@@ -32,18 +31,15 @@ m := MakefileAutoPush
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	make -C libft
-	$(CC) $(OBJ) -o $(NAME) $(LIBFT)
+	$(CC) $(OBJ) -o  $(NAME)
 
 %.o : %.c $(HEADER) 
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $<   -o $@
 
 clean :
-	make clean -C libft
 	$(RM) $(OBJ)
 
 fclean : clean
-	make  fclean -C libft
 	$(RM) $(NAME)
 
 re : fclean all

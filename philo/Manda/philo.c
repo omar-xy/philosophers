@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:46:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/13 03:21:01 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/24 23:26:57 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,27 @@ static int check_args(char **av)
 {
 	int i;
 
-	i = -1;
-	while (av[++i])
+	i = 1;
+	while (av[i])
 	{
 		if (ft_atoi(av[i]) <= 0)
-			return 1;
+			return 0;
+		i++;
 	}
-	return 0;
+	return 1;
 }
 
 t_table	*initialize_philos(t_table **ph, int n, char **av)
 {
 	int				i;
 	t_philo			*tmp;
-	pthread_mutex_t	d;	
+	pthread_mutex_t	d;
 	pthread_mutex_t	w;
 
-	pthread_mutex_init(&d, NULL);
-	pthread_mutex_init(&w, NULL);
+	if (pthread_mutex_init(&d, NULL))
+		ph_error("Failed to initialize!\n");
+	if (pthread_mutex_init(&w, NULL))
+		ph_error("Failed to initialize!\n");
 	i = 1;
 	while (i <= n)
 	{
@@ -60,7 +63,10 @@ t_table *set_args(char **av)
 		return (NULL);
 	ph->nbr_of_philo = ft_atoi(av[1]);
 	if (ph->nbr_of_philo == 0)
-		return NULL;// indicate the error
+	{
+		ph_error("Number of philos should be greater than 0 !\n");
+		return NULL;
+	}
 	ph->time_to_die = ft_atoi(av[2]);
 	ph->time_to_eat = ft_atoi(av[3]);
 	ph->time_to_sleep = ft_atoi(av[4]);
@@ -75,7 +81,11 @@ int main(int ac, char **av)
 
     if (ac == 5 || ac == 6)
 	{
-		if (check_args(av)= = 
+		if (check_args(av) == 0)
+		{
+			ph_error("Invalide args");
+			return 1;
+		}
 		philo = set_args(av);
 		if (!philo)
 			return (1);
@@ -86,7 +96,7 @@ int main(int ac, char **av)
 	}
 	else
 	{
-    	printf( "Inavlid args!\n");
+    	printf( "Inavlid number of args!\n");
 		return 1;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 00:38:05 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/12 18:16:28 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/07/14 00:19:40 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,5 @@ void	start_dinner(t_philo *filo, int n)
 		filo = filo->next;
 		i++;
 	}
-	while (filo)
-	{
-		usleep(1000);
-		if (time_now() - filo->last_meal > filo->table->time_to_die)
-		{
-			pthread_mutex_lock(filo->write);
-			printf("%ld %d died \n",time_now() - (filo->table->time_begin), filo->id);
-			pthread_mutex_lock(filo->death);
-			filo->table->died = 1;
-			pthread_mutex_unlock(filo->death);
-		}
-		if (filo->table->died || filo->table->nbr_of_philo <= 0)
-			return ;
-		filo = filo->next;
-	}
+	check_death(filo);
 }
