@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 02:24:42 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/26 01:29:25 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/05 02:02:50 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,11 @@ void	ft_my_usleep(unsigned long t, t_philo *filo)
 	int				i;
 
 	i = 0;
+	(void)filo;
 	period = time_now();
 	while ((time_now() - period) < t)
     {
 	    usleep(1000);
-        if (time_now() - filo->last_meal > filo->table->time_to_die)
-		{
-			sem_wait(filo->table->write);
-			printf("%ld %d died \n", time_now() - (filo->table->time_begin), filo->id);
-			sem_post(filo->table->death);
-			if (filo->table->nbr_meals != -1)
-			{
-				while (i < filo->table->nbr_of_philo)
-				{
-					sem_post(filo->table->nb_of_meals);
-					i++;
-				}
-			}
-            exit(0);
-		} 
     }
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:30:18 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/26 01:15:07 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/04 17:17:44 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,35 +26,33 @@ static int check_args(char **av)
 	return 1;
 }
 
+sem_t	*sem_open_parms(char *str, int flag)
+{
+	sem_t *sem;
+	
+	sem_unlink(str);
+	sem = sem_open(str, O_CREAT, 0654, flag);
+	if (sem == SEM_FAILED)
+		exit (1);
+	return (sem);
+}
+
 t_table	*initialize_philos(t_table **ph, int n, char **av)
 {
 	int				i;
 	t_philo			*tmp;
-	sem_t			*forks;
-	sem_t			*dead;
-	sem_t			*write;
-	sem_t			*nb_m;
 	
-
 	i = 1;
-	sem_unlink("forks");
-	sem_unlink("dead");
-	sem_unlink("write");
-	sem_unlink("nbr_of_meals");
-	forks = sem_open("forks", O_CREAT, 0654, ft_atoi(av[1]));
-	dead = sem_open("dead", O_CREAT, 0654, 0);
-	write = sem_open("write", O_CREAT, 0654, 1);
+	(*ph)->fork = sem_open_parms("fork", (*ph)->nbr_of_philo);
+	(*ph)->death = sem_open_parms("death", 0);
+	(*ph)->write = sem_open_parms("write", 1);
 	if (av[5])
 	{
-		nb_m = sem_open("nbr_of_meals", O_CREAT, 0654, 0);
-		(*ph)->nb_of_meals = nb_m;
 		(*ph)->nbr_meals = ft_atoi(av[5]);
+		(*ph)->nb_of_meals = sem_open_parms("nbr_of_meals", 0);
 	}
 	else
 		(*ph)->nbr_meals = -1;
-	(*ph)->fork = forks;
-	(*ph)->death = dead;
-	(*ph)->write = write;
 	while (i <= n)
 	{
 		tmp = ft_lstnew_ph(i, *ph);
@@ -102,7 +100,6 @@ int main(int ac, char **av)
 		if (!philo)
 			return (1);
 		fork_for_philo(philo->philos, av);
-		// sema_dinner(philo, philo->nbr_of_philo);
 	}
 	else
 	{
