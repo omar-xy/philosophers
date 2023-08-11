@@ -6,11 +6,11 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 02:14:16 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/25 02:14:42 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 11:19:29 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo_bonus.h"
+#include "philo_bonus.h"
 
 static int	checksign(char *str, int *sign, int i)
 {

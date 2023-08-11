@@ -6,72 +6,64 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 02:33:05 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/05 02:02:03 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 13:28:50 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	*check_death(void *param)
+void	loop_of_life(t_philo *phipho)
 {
-	t_philo	*filo;
-	int		i;
+	int	meal;
 
-	i = 0;
-	filo = (t_philo *)param;
+	meal = 0;
+	phipho->last_meal = time_now();
 	while (1)
 	{
-		usleep(1000);
-        if (time_now() - filo->last_meal > filo->table->time_to_die)
+		lock_forks(phipho);
+		eating(phipho);
+		phipho->last_meal = time_now();
+		ft_my_usleep(phipho->table->time_to_eat);
+		unlock_forks(phipho);
+		if (phipho->table->nbr_meals != -1 && meal < phipho->table->nbr_meals)
+			meal++;
+		if (meal == phipho->table->nbr_meals)
 		{
-			sem_wait(filo->table->write);
-			printf("%ld %d died \n", time_now() - (filo->table->time_begin), filo->id);
-			sem_post(filo->table->death);
-			if (filo->table->nbr_meals != -1)
-			{
-				while (i < filo->table->nbr_of_philo)
-				{
-					sem_post(filo->table->nb_of_meals);
-					i++;
-				}
-			}
-            exit(0);
+			sem_post(phipho->table->nb_of_meals);
+			exit(0);
 		}
+		sleeping(phipho);
+		ft_my_usleep(phipho->table->time_to_sleep);
+		thinking(phipho);
 	}
-	
 }
 
 void	routine(t_philo *ph)
 {
-	int		meal;
 	pthread_t	pthread;
 
-	meal = 0;
 	if ((ph->id % 2) == 0)
 		usleep(400);
 	pthread_create(&pthread, NULL, check_death, ph);
-	ph->last_meal = time_now();
-	while (1)
+	loop_of_life(ph);
+}
+
+void	optional_case(t_philo *phi, char **v)
+{
+	int	i;
+
+	if (v[5])
 	{
-		lock_forks(ph);
-		eating(ph);
-		ph->last_meal = time_now();
-		ft_my_usleep(ph->table->time_to_eat, ph);
-		unlock_forks(ph);
-		if (ph->table->nbr_meals != -1 && meal < ph->table->nbr_meals)
-			meal++;
-		if (meal == ph->table->nbr_meals)
+		i = 0;
+		while (i < phi->table->nbr_of_philo)
 		{
-			sem_post(ph->table->nb_of_meals);
-			exit(0);	
+			sem_wait(phi->table->nb_of_meals);
+			i++;
 		}
-		sleeping(ph);
-		ft_my_usleep(ph->table->time_to_sleep, ph);
-		thinking(ph);
+		sem_post(phi->table->death);
 	}
 }
-// should handle the case of one philo
-// should handle the
+
 void	fork_for_philo(t_philo *ph, char **av)
 {
 	int		i;
@@ -93,25 +85,10 @@ void	fork_for_philo(t_philo *ph, char **av)
 			exit(0);
 		}
 		tmp = tmp->next;
-		pids[i] = p;
-		i++;
+		pids[i++] = p;
 	}
-	if (av[5])
-	{
-		i = 0;
-		while (i < ph->table->nbr_of_philo)
-		{
-			sem_wait(ph->table->nb_of_meals);
-			i++;
-		}
-		sem_post(ph->table->death);
-	}
+	optional_case(ph, av);
 	sem_wait(ph->table->death);
-	i = 0;
-	while (i < ph->table->nbr_of_philo)
-	{
-		kill(pids[i], SIGTERM);
-        i++;
-	}
+	kill_child(pids, ph);
 	free(pids);
 }

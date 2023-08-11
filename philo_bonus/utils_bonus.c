@@ -6,11 +6,11 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 02:12:51 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/25 06:36:26 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 13:10:17 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo_bonus.h"
+#include "philo_bonus.h"
 
 t_philo	*ft_lstnew_ph(int id, t_table *table)
 {
