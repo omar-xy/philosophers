@@ -6,7 +6,7 @@
 #    By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/16 03:24:07 by otaraki           #+#    #+#              #
-#    Updated: 2023/08/05 01:03:02 by otaraki          ###   ########.fr        #
+#    Updated: 2023/08/11 11:50:26 by otaraki          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ m := MakefileAutoPush
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	$(CC)  $(OBJ) -o  $(NAME)
+	$(CC)  $(OBJ) -o  $(NAME) 
 
 %.o : %.c $(HEADER) 
 	$(CC) $(CFLAGS) -c $<  -o $@

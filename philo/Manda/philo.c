@@ -6,24 +6,24 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:46:03 by otaraki           #+#    #+#             */
-/*   Updated: 2023/07/24 23:26:57 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 11:16:48 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/philo.h"
+#include "../includes/philo.h"
 
-static int check_args(char **av)
+static int	check_args(char **av)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (av[i])
 	{
 		if (ft_atoi(av[i]) <= 0)
-			return 0;
+			return (0);
 		i++;
 	}
-	return 1;
+	return (1);
 }
 
 t_table	*initialize_philos(t_table **ph, int n, char **av)
@@ -54,7 +54,7 @@ t_table	*initialize_philos(t_table **ph, int n, char **av)
 	return (*ph);
 }
 
-t_table *set_args(char **av)
+t_table	*set_args(char **av)
 {
 	t_table	*ph;
 
@@ -65,7 +65,7 @@ t_table *set_args(char **av)
 	if (ph->nbr_of_philo == 0)
 	{
 		ph_error("Number of philos should be greater than 0 !\n");
-		return NULL;
+		return (NULL);
 	}
 	ph->time_to_die = ft_atoi(av[2]);
 	ph->time_to_eat = ft_atoi(av[3]);
@@ -75,16 +75,16 @@ t_table *set_args(char **av)
 	return (ph);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_table *philo;
+	t_table	*philo;
 
-    if (ac == 5 || ac == 6)
+	if (ac == 5 || ac == 6)
 	{
 		if (check_args(av) == 0)
 		{
 			ph_error("Invalide args");
-			return 1;
+			return (1);
 		}
 		philo = set_args(av);
 		if (!philo)
@@ -96,7 +96,7 @@ int main(int ac, char **av)
 	}
 	else
 	{
-    	printf( "Inavlid number of args!\n");
-		return 1;
+		printf("Inavlid number of args!\n");
+		return (1);
 	}
 }
