@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 00:38:05 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/11 11:34:30 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 16:16:35 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,9 @@ void	ft_my_usleep(unsigned long t)
 void	*pattern(void *temp)
 {
 	t_philo	*philo;
-	int		meal;
 
-	meal = 0;
 	philo = (t_philo *)temp;
-	if ((philo->id % 2) == 0)
+	if ((philo->id % 2) != 0)
 		usleep(400);
 	philo->last_meal = time_now();
 	while (1)
@@ -47,13 +45,10 @@ void	*pattern(void *temp)
 		philo->last_meal = time_now();
 		ft_my_usleep(philo->table->time_to_eat);
 		unlock_forks(philo);
+		philo->n_of_meals_per_philo++;
 		sleeping(philo);
 		ft_my_usleep(philo->table->time_to_sleep);
 		thinking(philo);
-		if (meal < philo->nbr_of_meals)
-			meal++;
-		if (meal == philo->nbr_of_meals)
-			philo->table->nbr_of_philo -= 1;
 	}
 	return (philo);
 }

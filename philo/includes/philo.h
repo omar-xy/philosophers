@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 03:24:02 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/11 11:11:20 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 16:41:25 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 typedef struct s_philo
 {
 	int				id;
-	int				nbr_of_meals;
+	int				n_of_meals_per_philo;
 	unsigned long	last_meal;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
@@ -34,6 +34,7 @@ typedef struct s_philo
 typedef struct s_table
 {
 	int				nbr_of_philo;
+	int				nbr_of_meals;
 	int				died;
 	unsigned long	time_to_die;
 	unsigned long	time_to_eat;
@@ -59,6 +60,7 @@ void			eating(t_philo *philo);
 void			sleeping(t_philo *philo);
 void			thinking(t_philo *philo);
 void			check_death(t_philo *filo);
+int				check_meal(t_philo *philo);
 void			ph_error(char *msg);
 void			destroy_data(t_philo *philo);
 // void			clear_data(t_philo *philo);

@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 04:18:08 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/11 11:15:39 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/11 16:18:54 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	check_death(t_philo *filo)
 			filo->table->died = 1;
 			pthread_mutex_unlock(filo->death);
 		}
-		if (filo->table->died || filo->table->nbr_of_philo <= 0)
+		if (filo->table->died || check_meal(filo))
 			return ;
 		filo = filo->next;
 	}
