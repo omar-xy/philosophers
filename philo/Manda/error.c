@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 23:43:33 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/11 16:41:48 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/16 01:44:12 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,12 @@ void	destroy_data(t_philo *philo)
 	int	i;
 
 	i = 0;
-	while (i < philo->table->nbr_of_philo)
+	while (i < philo->table->nbr_of_philo - 1)
 	{
 		pthread_mutex_destroy(&(philo->fork));
+		philo = philo->next;
 		i++;
 	}
-	pthread_mutex_destroy((philo->death));
-	pthread_mutex_destroy((philo->write));
 }
 
 int	check_meal(t_philo *philo)

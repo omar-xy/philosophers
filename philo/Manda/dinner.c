@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 00:38:05 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/11 16:16:35 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/16 01:43:38 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,26 @@ void	*pattern(void *temp)
 	philo = (t_philo *)temp;
 	if ((philo->id % 2) != 0)
 		usleep(400);
+	pthread_mutex_lock(philo->protect);
 	philo->last_meal = time_now();
+	pthread_mutex_unlock(philo->protect);
 	while (1)
 	{
 		lock_forks(philo);
 		eating(philo);
+		pthread_mutex_lock(philo->protect);
 		philo->last_meal = time_now();
+		pthread_mutex_unlock(philo->protect);
 		ft_my_usleep(philo->table->time_to_eat);
 		unlock_forks(philo);
+		pthread_mutex_lock(philo->protect);
 		philo->n_of_meals_per_philo++;
+		pthread_mutex_unlock(philo->protect);
 		sleeping(philo);
 		ft_my_usleep(philo->table->time_to_sleep);
 		thinking(philo);
 	}
-	return (philo);
+	return (NULL);
 }
 
 void	start_dinner(t_philo *filo, int n)
