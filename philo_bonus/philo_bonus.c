@@ -6,7 +6,7 @@
 /*   By: otaraki <otaraki@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 01:30:18 by otaraki           #+#    #+#             */
-/*   Updated: 2023/08/11 11:20:54 by otaraki          ###   ########.fr       */
+/*   Updated: 2023/08/16 17:20:15 by otaraki          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_table	*set_args(char **av)
 	if (ph->nbr_of_philo == 0)
 	{
 		ph_error("Number of philos should be greater than 0 !\n");
-		return (NULL);
+		return (free(ph), NULL);
 	}
 	ph->time_to_die = ft_atoi(av[2]);
 	ph->time_to_eat = ft_atoi(av[3]);
